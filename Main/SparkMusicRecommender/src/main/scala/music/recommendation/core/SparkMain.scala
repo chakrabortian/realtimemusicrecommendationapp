@@ -6,7 +6,9 @@ package music.recommendation.core
 import org.apache.spark.mllib.recommendation.{ALS, MatrixFactorizationModel, Rating}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+
 import scala.collection.Map
+import scala.util.{Failure, Success, Try}
 
 
 /**
