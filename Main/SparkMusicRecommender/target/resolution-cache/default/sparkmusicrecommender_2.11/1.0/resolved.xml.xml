@@ -4,7 +4,7 @@
 		module="sparkmusicrecommender_2.11"
 		revision="1.0"
 		status="integration"
-		publication="20170408103010"
+		publication="20170408225317"
 	>
 		<description>
 		SparkMusicRecommender

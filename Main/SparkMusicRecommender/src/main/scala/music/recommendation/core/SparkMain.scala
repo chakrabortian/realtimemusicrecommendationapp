@@ -2,7 +2,8 @@ package music.recommendation.core
 
 
 
-// import music.recommendation.bo.{ArtistCount, SongInfo, UserTaste}
+
+import music.recommendation.bo.{ArtistCount, SongInfo, UserTaste}
 import org.apache.spark.mllib.recommendation.{ALS, MatrixFactorizationModel, Rating}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
@@ -15,9 +16,7 @@ import scala.util.{Failure, Success, Try}
   * Created by deveshkandpal on 4/8/17.
   */
 
-case class SongInfo(artist : String, title : String, songId : String)
-case class ArtistCount(userId : String, artist : String, count : Long)
-case class UserTaste(userId : String, songId : String, count : Int)
+
 
 object SparkMain {
 
