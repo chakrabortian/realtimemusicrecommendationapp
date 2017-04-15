@@ -1,6 +1,7 @@
 package music.recommendation.core
 
-import music.recommendation.bo.{ArtistCount, SongInfo, UserPrediction, UserTaste}
+import music.recommendation.bo._
+import org.apache.spark.SparkContext
 import org.apache.spark.mllib.recommendation.Rating
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
@@ -35,14 +36,16 @@ object TestLogic {
 
   val ALS_MODEL_TRAIN_LOCATION = "/Users/deveshkandpal/Code/Spark/dataset/model/train/"
 
+  val K_MEANS_MODEL_TRAIN_LOCATION = "/Users/deveshkandpal/Code/Spark/dataset/model/kmeans"
+
   def main(args : Array[String]) : Unit = {
 
 
     val spark : SparkSession = SparkSession
       .builder().master("local")
       .appName("Real Time Music Reco App")
-      .config("spark.driver.memory", "3g")
-      .config("spark.executor.memory", "4g")
+      .config("spark.driver.memory", "7g")
+      .config("spark.executor.memory", "3g")
       .getOrCreate()
 
 
@@ -95,6 +98,7 @@ object TestLogic {
     val numIterations = 30
     val clusters = KMeans.train(parsedData, numClusters, numIterations)
 
+    clusters.save(spark.sparkContext, K_MEANS_MODEL_TRAIN_LOCATION)
 
     val vectorPredictionMapping = parsedData.map(vector => {
       val prediction = clusters.predict(vector)
@@ -105,72 +109,48 @@ object TestLogic {
     val WSSSE = clusters.computeCost(parsedData)
     println("Within Set Sum of Squared Errors = " + WSSSE)
 
-    val userVectorMappingDf = userVectorMapping.toDF("userId", "vector")
-    val vectorPredictionMappingDf = vectorPredictionMapping.toDF("vector", "prediction")
 
-     val joinedUserPredictionMappingDf = userVectorMappingDf.join(vectorPredictionMappingDf, "vector")
-
-    // .select("*").where("userId='9e077c923c655fca51bd803027156c42192283ee'").show()
-
-    // 9e077c923c655fca51bd803027156c42192283ee
-    // [1099.0,253.0,131.0]
-
-    // for verification purpose only
-    // clusters.predict(Vectors.dense(Array[Double](1099.0,253.0,131.0)))
-
-    val userPredictionRDD = joinedUserPredictionMappingDf.rdd.map(row => UserPrediction(row.getAs("userId"), row.getAs("prediction"))).groupBy(r => r.prediction)
-
-
-
-
-
-
-    ////////////////////////////
-
-    // ALS Rating - create for each cluster
-
-    ////////////////////////////
-
-
-
-    val ratings = convertCombinedRddToRating(combinedRdd, userZip, artistZip)
-
-
-
-
-    // val model = ALS.trainImplicit(ratings, 10, 5, 0.01, 1.0)
-
-    val reversedUserZip = reverseUserZip(userZip)
-
-   val q =  (userPredictionRDD.map( up => {
-      val clusterId = up._1
-      val userList = up._2.toList.map(up => up.userId)
-      val filteredRatings = ratings.filter(r => userList.contains(reversedUserZip(r.user.toLong)))
-     val model = ALS.trainImplicit(filteredRatings, 10, 5, 0.01, 1.0)
-      model.save(spark.sparkContext,  ALS_MODEL_TRAIN_LOCATION + clusterId)
-     (clusterId, ALS_MODEL_TRAIN_LOCATION + clusterId)
-}))
-
-    q.collectAsMap()
-
-
-
-
-
-
-
-
-
-
-
+//    val userVectorMappingDf = userVectorMapping.toDF("userId", "vector")
+//    val vectorPredictionMappingDf = vectorPredictionMapping.toDF("vector", "prediction")
+//
+//     val joinedUserPredictionMappingDf = userVectorMappingDf.join(vectorPredictionMappingDf, "vector")
+//
+//    val userPredictionRDD  = joinedUserPredictionMappingDf.rdd.map(row => UserPrediction(row.getAs("userId"), row.getAs("prediction")))
+//
+//    val ratings = convertCombinedRddToRating(combinedRdd, userZip, artistZip)
+//
+//    val reversedUserZip = reverseUserZip(userZip)
+//
+//    val userIdPredictionRdd = userPredictionRDD.map(upRdd => (userZip(upRdd.userId).toInt, upRdd.prediction))
+//
+//      val userIdPredictionDf = userIdPredictionRdd.toDF("user", "clusterId")
+//
+//    val alsKMeansDf = userIdPredictionDf.join(ratings.toDF(), "user")
+//
+//    alsKMeansDf.show()
+//
+//    alsKMeansDf.printSchema()
+//
+//
+//    val alsRatingRDD = alsKMeansDf.rdd.map(alsr => (Integer.valueOf(alsr.getAs("clusterId").toString), Rating(alsr.getAs("user"), alsr.getAs("product"), alsr.getAs("rating"))))
+//
+//
+//    val collected = alsRatingRDD.groupByKey().collectAsMap()
+//
+//    for((k, v) <- collected) {
+//      val clusterId = k
+//      val filteredRating = spark.sparkContext.parallelize(v.toList)
+//      val model = ALS.trainImplicit(filteredRating, 10, 5, 0.01, 1.0)
+//      model.save(spark.sparkContext,  ALS_MODEL_TRAIN_LOCATION + clusterId)
+//      println("Model Saved at : " + ALS_MODEL_TRAIN_LOCATION + clusterId)
+//
+//    }
 
   }
 
   def reverseUserZip(input : Map[String, Long]) : Map[Long, String] = input.map(i => (i._2, i._1))
 
   def flattenRDD(input : RDD[List[ArtistCount]]) : RDD[ArtistCount] = input.flatMap(a => a.map(b => b))
-
-  def prepareDenseArray(ua : Iterable[UserArtist]) : Array[Double] = ???
 
   def convertArtistNameToIndex(df :DataFrame, artistZip : Map[String, Long]) : RDD[UserArtist] = df.rdd.map(row => UserArtist(row.getAs("userId"), artistZip(row.getAs("artist"))))
 
