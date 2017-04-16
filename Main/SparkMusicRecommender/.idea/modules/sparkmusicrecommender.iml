@@ -22,6 +22,18 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="SBT: aopalliance:aopalliance:1.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: xml-apis:xml-apis:1.3.03:jar" level="project" />
+    <orderEntry type="library" name="SBT: xerces:xercesImpl:2.8.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: xalan:xalan:2.7.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: joda-time:joda-time:2.9:jar" level="project" />
+    <orderEntry type="library" name="SBT: javax.xml.bind:jaxb-api:2.2.7:jar" level="project" />
+    <orderEntry type="library" name="SBT: javax.json:javax.json-api:1.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: edu.stanford.nlp:stanford-corenlp:3.6.0:models:jar" level="project" />
+    <orderEntry type="library" name="SBT: edu.stanford.nlp:stanford-corenlp:3.6.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: de.jollyday:jollyday:0.4.7:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.io7m.xom:xom:1.2.10:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.googlecode.efficient-java-matrix-library:ejml:0.23:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.google.protobuf:protobuf-java:2.5.0:jar" level="project" />
     <orderEntry type="library" name="SBT: xmlenc:xmlenc:0.52:jar" level="project" />
     <orderEntry type="library" name="SBT: oro:oro:2.0.8:jar" level="project" />
     <orderEntry type="library" name="SBT: org.xerial.snappy:snappy-java:1.1.2.6:jar" level="project" />
@@ -153,7 +165,6 @@
     <orderEntry type="library" name="SBT: com.twitter:chill-java:0.8.0:jar" level="project" />
     <orderEntry type="library" name="SBT: com.thoughtworks.paranamer:paranamer:2.6:jar" level="project" />
     <orderEntry type="library" name="SBT: com.ning:compress-lzf:1.0.3:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.google.protobuf:protobuf-java:2.5.0:jar" level="project" />
     <orderEntry type="library" name="SBT: com.google.inject:guice:3.0:jar" level="project" />
     <orderEntry type="library" name="SBT: com.google.guava:guava:14.0.1:jar" level="project" />
     <orderEntry type="library" name="SBT: com.google.code.findbugs:jsr305:1.3.9:jar" level="project" />
