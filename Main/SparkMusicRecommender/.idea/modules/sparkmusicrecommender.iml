@@ -33,7 +33,6 @@
     <orderEntry type="library" name="SBT: de.jollyday:jollyday:0.4.7:jar" level="project" />
     <orderEntry type="library" name="SBT: com.io7m.xom:xom:1.2.10:jar" level="project" />
     <orderEntry type="library" name="SBT: com.googlecode.efficient-java-matrix-library:ejml:0.23:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.google.protobuf:protobuf-java:2.5.0:jar" level="project" />
     <orderEntry type="library" name="SBT: xmlenc:xmlenc:0.52:jar" level="project" />
     <orderEntry type="library" name="SBT: oro:oro:2.0.8:jar" level="project" />
     <orderEntry type="library" name="SBT: org.xerial.snappy:snappy-java:1.1.2.6:jar" level="project" />
@@ -179,5 +178,6 @@
     <orderEntry type="library" name="SBT: com.esotericsoftware:kryo-shaded:3.0.3:jar" level="project" />
     <orderEntry type="library" name="SBT: com.clearspring.analytics:stream:2.7.0:jar" level="project" />
     <orderEntry type="library" name="SBT: com.chuusai:shapeless_2.11:2.0.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.google.protobuf:protobuf-java:2.6.1:jar" level="project" />
   </component>
 </module>

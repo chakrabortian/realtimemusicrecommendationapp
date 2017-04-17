@@ -91,6 +91,7 @@ object TestLogic {
     }).cache()
 
 
+
     val parsedData = userVectorMapping.map(entry => entry._2)
 
 
@@ -175,8 +176,7 @@ object TestLogic {
 
   def extractALSFeatures() : RDD[ArtistCount] = ???
 
-  def convertToSongInfo2(rawRdd : RDD[Row]) : RDD[SongInfo] = rawRdd.map( row => SongInfo(row.getAs("artist"),
-    row.getAs("title"), row.getAs("track_id")))
+
 
   def convertToSongInfo(rawRdd : RDD[Row]) : RDD[Option[SongInfo]] = rawRdd.map(row => {
 
@@ -189,7 +189,7 @@ object TestLogic {
 
   def parse(x : String) : Try[SongInfo] = Try {
     val splitted = x.split("<SEP>")
-    SongInfo(splitted(2), splitted(3), splitted(1))
+    SongInfo(splitted(2), splitted(3), splitted(1), splitted(0))
   }
 
   def convertToUserSongTaste(rawRdd : RDD[Row]) : RDD[UserTaste] = rawRdd.map(row => {

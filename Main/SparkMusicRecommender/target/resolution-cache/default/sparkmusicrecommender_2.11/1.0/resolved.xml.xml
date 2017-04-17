@@ -4,7 +4,7 @@
 		module="sparkmusicrecommender_2.11"
 		revision="1.0"
 		status="integration"
-		publication="20170416134626"
+		publication="20170416165134"
 	>
 		<description>
 		SparkMusicRecommender
@@ -37,6 +37,7 @@
 		<dependency org="org.apache.spark" name="spark-core_2.11" rev="2.1.0" conf="compile->default(compile)"/>
 		<dependency org="org.apache.spark" name="spark-sql_2.11" rev="2.1.0" conf="compile->default(compile)"/>
 		<dependency org="org.apache.spark" name="spark-streaming_2.11" rev="2.1.0" conf="compile->default(compile)"/>
+		<dependency org="com.google.protobuf" name="protobuf-java" rev="2.6.1" conf="compile->default(compile)"/>
 		<dependency org="org.apache.spark" name="spark-mllib_2.11" rev="2.1.0" conf="compile->default(compile)"/>
 		<dependency org="edu.stanford.nlp" name="stanford-corenlp" rev="3.6.0" conf="compile->default(compile)">
 			<artifact name="stanford-corenlp" type="jar" ext="jar" conf="compile"/>
