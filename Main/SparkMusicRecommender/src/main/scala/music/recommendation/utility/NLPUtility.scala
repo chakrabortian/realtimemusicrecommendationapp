@@ -12,6 +12,7 @@ import org.apache.spark.sql.functions.udf
 
 /**
   * Created by priyesh on 4/15/17.
+  * @Credits - https://github.com/databricks/spark-corenlp
   */
 object NLPUtility {
 
