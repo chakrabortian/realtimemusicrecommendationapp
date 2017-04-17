@@ -101,6 +101,7 @@ object ColdStartUser {
       val predictedALSModel = MatrixFactorizationModel.load(spark.sparkContext, ALS_MODEL_TRAIN_LOCATION + predictedCluster)
 
 
+
 //
 //      val user1 = predictedALSModel.recommendUsers(1099, 5).toList
 //      val user2 = predictedALSModel.recommendUsers(253, 5).toList

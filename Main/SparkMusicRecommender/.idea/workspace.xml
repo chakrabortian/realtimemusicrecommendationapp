@@ -30,14 +30,100 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="LyricsAnalysis.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LyricsAnalysis.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/LyricsAnalysis.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="146" column="0" lean-forward="true" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+            <state relative-caret-position="360">
+              <caret line="65" column="114" lean-forward="false" selection-start-line="65" selection-start-column="114" selection-end-line="65" selection-end-column="114" />
               <folding>
                 <element signature="e#36#68#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExistingUserTest.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/ExistingUserTest.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="151" column="20" lean-forward="true" selection-start-line="151" selection-start-column="20" selection-end-line="151" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Dummy.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/Dummy.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="250">
+              <caret line="26" column="174" lean-forward="true" selection-start-line="26" selection-start-column="174" selection-end-line="26" selection-end-column="244" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LyricsTestLogic.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/LyricsTestLogic.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="163">
+              <caret line="12" column="43" lean-forward="true" selection-start-line="12" selection-start-column="43" selection-end-line="12" selection-end-column="43" />
+              <folding>
+                <element signature="e#35#81#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NLPUtility.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/utility/NLPUtility.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="21" column="6" lean-forward="true" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="21" />
+              <folding>
+                <element signature="e#40#80#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="functions.scala" pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.ivy2/cache/org.apache.spark/spark-sql_2.11/srcs/spark-sql_2.11-2.1.0-sources.jar!/org/apache/spark/sql/functions.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="3068" column="5" lean-forward="true" selection-start-line="3068" selection-start-column="5" selection-end-line="3068" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestLogic.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/TestLogic.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="294">
+              <caret line="109" column="48" lean-forward="true" selection-start-line="109" selection-start-column="48" selection-end-line="109" selection-end-column="48" />
+              <folding>
+                <element signature="e#35#67#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColdStartUser.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/ColdStartUser.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="222">
+              <caret line="87" column="28" lean-forward="false" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SparkMain.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/SparkMain.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="358">
+              <caret line="101" column="0" lean-forward="true" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -60,18 +146,18 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/SparkTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/utility/NLPUtility.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/bo/SongInfo.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/ExistingUserTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/SparkMain.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/LyricsTestLogic.scala" />
         <option value="$PROJECT_DIR$/build.sbt" />
-        <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/ColdStartUser.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/bo/LyricsInfo.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/bo/UserSongLyricsPosInfo.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/Dummy.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/TestLogic.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/ColdStartUser.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/utility/NLPUtility.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/LyricsAnalysis.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/music/recommendation/core/LyricsTestLogic.scala" />
       </list>
     </option>
   </component>
@@ -221,7 +307,7 @@
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Application.LyricsAnalysis">
+  <component name="RunManager" selected="Application.LyricsTestLogic">
     <configuration default="false" name="TestLogic" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -586,9 +672,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.LyricsAnalysis" />
-        <item index="1" class="java.lang.String" itemvalue="Application.Dummy" />
-        <item index="2" class="java.lang.String" itemvalue="Application.LyricsTestLogic" />
+        <item index="0" class="java.lang.String" itemvalue="Application.LyricsTestLogic" />
+        <item index="1" class="java.lang.String" itemvalue="Application.LyricsAnalysis" />
+        <item index="2" class="java.lang.String" itemvalue="Application.Dummy" />
         <item index="3" class="java.lang.String" itemvalue="Application.ColdStartUser" />
         <item index="4" class="java.lang.String" itemvalue="Application.TestLogic" />
       </list>
@@ -656,7 +742,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1280" height="712" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -668,7 +754,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.67419356" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.58548385" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -765,7 +851,7 @@
         <state relative-caret-position="375">
           <caret line="25" column="85" lean-forward="false" selection-start-line="25" selection-start-column="85" selection-end-line="25" selection-end-column="85" />
           <folding>
-            <element signature="e#35#100#0" expanded="true" />
+            <element signature="e#35#100#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -775,7 +861,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#35#100#0" expanded="true" />
+            <element signature="e#35#100#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -807,7 +893,7 @@
         <state relative-caret-position="645">
           <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
           <folding>
-            <element signature="e#35#100#0" expanded="true" />
+            <element signature="e#35#100#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -815,28 +901,6 @@
     <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/ColdStartUserTest/scala.scala" />
     <entry file="jar://$USER_HOME$/.ivy2/cache/edu.stanford.nlp/stanford-corenlp/srcs/stanford-corenlp-3.6.0-sources.jar!/edu/stanford/nlp/pipeline/StanfordCoreNLP.java" />
     <entry file="jar://$USER_HOME$/.ivy2/cache/edu.stanford.nlp/stanford-corenlp/srcs/stanford-corenlp-3.6.0-sources.jar!/edu/stanford/nlp/parser/common/ParserGrammar.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/ExistingUserTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="67">
-          <caret line="151" column="20" lean-forward="true" selection-start-line="151" selection-start-column="20" selection-end-line="151" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/SparkMain.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="144" column="0" lean-forward="true" selection-start-line="144" selection-start-column="0" selection-end-line="144" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/LyricsTestLogic.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="51" lean-forward="false" selection-start-line="11" selection-start-column="51" selection-end-line="11" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build.sbt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -876,16 +940,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/ColdStartUser.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="55" column="6" lean-forward="false" selection-start-line="55" selection-start-column="6" selection-end-line="55" selection-end-column="55" />
-          <folding>
-            <element signature="e#35#100#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/bo/UserSongLyricsPosInfo.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -894,18 +948,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/utility/NLPUtility.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/SparkMain.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        <state relative-caret-position="358">
+          <caret line="101" column="0" lean-forward="true" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/Dummy.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/ColdStartUser.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="26" column="174" lean-forward="true" selection-start-line="26" selection-start-column="174" selection-end-line="26" selection-end-column="244" />
+        <state relative-caret-position="222">
+          <caret line="87" column="28" lean-forward="false" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/edu.stanford.nlp/stanford-corenlp/jars/stanford-corenlp-3.6.0.jar!/edu/stanford/nlp/simple/Sentence.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7064">
+          <caret line="309" column="24" lean-forward="false" selection-start-line="309" selection-start-column="24" selection-end-line="309" selection-end-column="24" />
           <folding />
         </state>
       </provider>
@@ -920,12 +982,56 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.apache.spark/spark-sql_2.11/srcs/spark-sql_2.11-2.1.0-sources.jar!/org/apache/spark/sql/functions.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="3068" column="5" lean-forward="true" selection-start-line="3068" selection-start-column="5" selection-end-line="3068" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/utility/NLPUtility.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="6" lean-forward="true" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="21" />
+          <folding>
+            <element signature="e#40#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/ExistingUserTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="151" column="20" lean-forward="true" selection-start-line="151" selection-start-column="20" selection-end-line="151" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/Dummy.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="26" column="174" lean-forward="true" selection-start-line="26" selection-start-column="174" selection-end-line="26" selection-end-column="244" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/LyricsAnalysis.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="146" column="0" lean-forward="true" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+        <state relative-caret-position="360">
+          <caret line="65" column="114" lean-forward="false" selection-start-line="65" selection-start-column="114" selection-end-line="65" selection-end-column="114" />
           <folding>
             <element signature="e#36#68#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/music/recommendation/core/LyricsTestLogic.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="12" column="43" lean-forward="true" selection-start-line="12" selection-start-column="43" selection-end-line="12" selection-end-column="43" />
+          <folding>
+            <element signature="e#35#81#0" expanded="true" />
           </folding>
         </state>
       </provider>

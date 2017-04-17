@@ -63,7 +63,7 @@ object LyricsAnalysis {
 
     //val wordDictionary = convertToDict(rawWordDict).collectAsMap()
 
-    val tempWordDictionary = convertToDict(rawWordDict).toDF().select('_1.as("wordId"), NLPUtility.pos('_2).as("pos"))
+    val tempWordDictionary = convertToDict(rawWordDict).toDF().select('_1.as("wordId"), NLPUtility.getPartOfSpeech('_2).as("pos"))
 
     val wordPosDictionary = tempWordDictionary.rdd.map(row => (row.getAs[Int]("wordId"), row.getAs[Seq[String]]("pos")(0))).collectAsMap()
 
@@ -133,30 +133,30 @@ object LyricsAnalysis {
 
 
 
-    val numClusters = (2 to 16 by 2).toList
+    val numClusters = (4 to 16 by 2).toList
 
-    val numIterations = (10 to 30 by 5).toList
+    //val numIterations = (10 to 30 by 5).toList
 
     var WSSSE = 0.0
     var clusterNoMin = 0
-    var minIter = 0
-    for(x <- numClusters; iter <- numIterations) {
-      val clusters = KMeans.train(parsedData, x, iter)
+    var minIter = 20
+    for(x <- numClusters) {
+      val clusters = KMeans.train(parsedData, x, 20)
 
       val newWSSSE = clusters.computeCost(parsedData)
 
-      println("Within Set Sum of Squared Errors = " + newWSSSE + " for cluster : " + x + " iter : " + iter)
+      println("Within Set Sum of Squared Errors = " + newWSSSE + " for cluster : " + x + " iter : " + 20)
       if(WSSSE == 0.0) {
         WSSSE = newWSSSE
         clusterNoMin = x
-        minIter = iter
+        minIter = 20
 
       }
       else {
         if (newWSSSE < WSSSE) {
           WSSSE = newWSSSE
           clusterNoMin = x
-          minIter = iter
+          minIter = 20
         }
       }
     }
