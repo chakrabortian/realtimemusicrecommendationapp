@@ -22,6 +22,11 @@ libraryDependencies += "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0"
 
 libraryDependencies +=  "edu.stanford.nlp" % "stanford-corenlp" % "3.6.0" classifier "models"
 
+libraryDependencies +=  "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % "2.1.0"
+
+libraryDependencies += "org.apache.spark" % "spark-streaming_2.11" % "2.1.0"
+
+
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 

@@ -94,7 +94,6 @@ object TestLogic {
 
     val parsedData = userVectorMapping.map(entry => entry._2)
 
-
     val numClusters = 12
     val numIterations = 30
     val clusters = KMeans.train(parsedData, numClusters, numIterations)

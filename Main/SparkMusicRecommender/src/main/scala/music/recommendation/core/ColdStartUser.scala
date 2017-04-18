@@ -84,6 +84,7 @@ object ColdStartUser {
 
       val parsedData = userVectorMapping.map(entry => entry._2)
 
+
       println("*** LOADING K-MEANS MODEL ***")
       // Load KMeans cluster
       val clusters = KMeansModel.load(spark.sparkContext, K_MEANS_MODEL_TRAIN_LOCATION)
