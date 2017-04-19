@@ -1,6 +1,7 @@
 package actors
 
 import akka.actor.{Actor, ActorRef, Props}
+import models.Recos
 import play.api.{Logger, Play}
 import play.api.libs.iteratee.{Concurrent, Enumeratee, Enumerator, Iteratee}
 import play.api.libs.json.{JsObject, Json}
@@ -8,6 +9,7 @@ import play.api.libs.ws.WS
 import play.extras.iteratees.{Encoding, JsonIteratees}
 import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits._
+
 import scala.collection.immutable.Map
 
 /**
@@ -16,6 +18,8 @@ import scala.collection.immutable.Map
 class ChildActor(out : ActorRef, kafkaActor : ActorRef) extends Actor {
 
   override def receive = {
+
+    case Recos(r) => out ! r
     case (a, b) => {
       Logger.info("Message received by Child from Kafka")
       out ! "Done!" + b

@@ -22,6 +22,7 @@ import play.api.libs.json.{JsObject, JsValue}
 import play.api.libs.ws.WS
 import play.extras.iteratees.{Encoding, JsonIteratees}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
 
 /**
   * Created by deveshkandpal on 4/17/17.
@@ -32,7 +33,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class UserController @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit exec: ExecutionContext, implicit val mat: Materializer) extends Controller with MongoController with ReactiveMongoComponents {
 
   val system =  ActorSystem("reactiveappactorsystem")
+
+  import system.dispatcher
   val kafkaActor : ActorRef = system.actorOf(Props[KafkaActor], name = "KafkaActor")
+
+  system.scheduler.schedule(5000 milliseconds, 5000 milliseconds, kafkaActor, KafkaActor.Subscribe )
 
   def getUsersCollection : Future[JSONCollection] = database.map(_.collection[JSONCollection]("users"))
 
