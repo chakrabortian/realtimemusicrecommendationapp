@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-8">
+    <h2> User Preference </h2>
+
+    <form [formGroup]="userpreferenceForm" (ngSubmit)="onSubmit()">
+
+      <li *ngFor="let obj of objectArray">
+        <a href="#" class="small" data-value="option1" tabIndex="-1">
+          <input type="checkbox">
+          <!-- (change)="expression && expression[obj.name]=$event.target.checked ? true : undefined" 
+        [ngModel]="expression && expression[obj.name]"> -->
+        </a>
+      </li>
+
+      <div class="row">
+        <div class="col-md-4" align="center">
+          <button type="submit" class="btn btn-success btn-block" [disabled]="!userpreferenceForm.valid">Show Recommendations</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
