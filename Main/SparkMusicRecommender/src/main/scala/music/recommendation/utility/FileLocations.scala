@@ -27,15 +27,6 @@ object FileLocations {
   val LYRICS_USERS_K_MEANS_MODEL_TRAIN_LOCATION = "/Users/deveshkandpal/Code/Spark/dataset/finalmodels/kmeans/userlyrics"
   val LYRICS_SONGS_K_MEANS_MODEL_TRAIN_LOCATION = "/Users/deveshkandpal/Code/Spark/dataset/finalmodels/kmeans/songlyrics"
 
-  var spark : SparkSession = null
 
-  val kafkaParams =  Map[String, Object](
-    "bootstrap.servers" -> "localhost:9092",
-    "key.deserializer" -> classOf[StringDeserializer],
-    "value.deserializer" -> classOf[StringDeserializer],
-    "group.id" -> "test-consumer-group",
-    "auto.offset.reset" -> "latest",
-    "enable.auto.commit" -> (false: java.lang.Boolean)
-  )
 
 }

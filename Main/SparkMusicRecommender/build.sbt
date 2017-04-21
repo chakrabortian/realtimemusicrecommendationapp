@@ -26,6 +26,7 @@ libraryDependencies +=  "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" %
 
 libraryDependencies += "org.apache.spark" % "spark-streaming_2.11" % "2.1.0"
 
+libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.0.0"
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 

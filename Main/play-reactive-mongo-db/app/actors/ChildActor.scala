@@ -1,7 +1,9 @@
 package actors
 
+import actors.ChildActor.Done
+import actors.KafkaActor.ColdStartArtistRecommendation
 import akka.actor.{Actor, ActorRef, Props}
-import models.Recos
+import models.ArtistRecos
 import play.api.{Logger, Play}
 import play.api.libs.iteratee.{Concurrent, Enumeratee, Enumerator, Iteratee}
 import play.api.libs.json.{JsObject, Json}
@@ -19,24 +21,18 @@ class ChildActor(out : ActorRef, kafkaActor : ActorRef) extends Actor {
 
   override def receive = {
 
-    case Recos(r) => out ! r
-    case (a, b) => {
-      Logger.info("Message received by Child from Kafka")
-      out ! "Done!" + b
+    case ArtistRecos(r) => out ! r
+    case Done => {
+      out ! "Done"
     }
     case message : String => {
-      Logger.info("Message received by child and now sending to kafka")
-      kafkaActor ! message
+      kafkaActor ! (ColdStartArtistRecommendation, message)
     }
-
-
   }
 
 }
 
 object ChildActor {
-
-  val userActorMap =  Map[String, ActorRef]()
-
+  case object Done
   def props(out : ActorRef, kafkaActor : ActorRef) = Props(new ChildActor(out, kafkaActor))
 }

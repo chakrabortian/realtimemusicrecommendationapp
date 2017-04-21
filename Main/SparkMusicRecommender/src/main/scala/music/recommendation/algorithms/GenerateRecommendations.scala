@@ -1,12 +1,15 @@
 package music.recommendation.algorithms
 
-import music.recommendation.utility.FileLocations
+import music.recommendation.utility.{FileLocations, SparkUtility}
 import music.recommendation.utility.FileLocations.ALS_MODEL_TRAIN_LOCATION
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel
-import org.apache.spark.sql.SparkSession
+import java.util.Properties
+
+import music.recommendation.dao.MongoOperations
+import org.apache.kafka.clients.producer._
 
 import scala.collection.Map
 
@@ -30,10 +33,11 @@ class GenerateRecommendations {
       ](artistZip(choices(0)).toDouble, artistZip(choices(1)).toDouble, artistZip(choices(2)).toDouble)))
     println("Cold start user : "+ userId + " has following choice => " + choices.mkString("::"))
     println("Cold start user belongs to cluster id :  " + predictedCluster)
-
+    val mongoOps = new MongoOperations()
+    mongoOps.saveNewUserPrediction(userId, predictedCluster)
     println("*** LOADING ALS MODEL ***")
 
-    val predictedALSModel = MatrixFactorizationModel.load(FileLocations.spark.sparkContext, ALS_MODEL_TRAIN_LOCATION + predictedCluster)
+    val predictedALSModel = MatrixFactorizationModel.load(SparkUtility.spark.sparkContext, ALS_MODEL_TRAIN_LOCATION + predictedCluster)
 
     val userList = choices.flatMap(choice => {
       predictedALSModel.recommendUsers(artistZip(choice).toInt, 5)
@@ -59,22 +63,22 @@ class GenerateRecommendations {
 
   def pushToKafka(userId : String, topic : String, message : String) = {
 
-    import java.util.Properties
-
-    import org.apache.kafka.clients.producer._
-
-    val  props = new Properties()
-    props.put("bootstrap.servers", "localhost:9092")
-    props.put("acks","1")
-    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-
-    val producer = new KafkaProducer[String, String](props)
-
+    val producer = GenerateRecommendations.producer
     val record = new ProducerRecord(topic, userId, message)
     producer.send(record)
 
   }
+}
+
+object GenerateRecommendations {
+
+  val  props = new Properties()
+  props.put("bootstrap.servers", "localhost:9092")
+  props.put("acks","1")
+  props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+  props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+
+  val producer = new KafkaProducer[String, String](props)
 
 }
 

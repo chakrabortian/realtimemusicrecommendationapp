@@ -1,6 +1,6 @@
 package actors
 
-import actors.KafkaActor.Subscribe
+import actors.KafkaActor._
 import akka.actor.{Actor, ActorRef, Props}
 import org.apache.kafka.clients.consumer.{ConsumerRecord, KafkaConsumer}
 import play.api.{Logger, Play}
@@ -12,7 +12,8 @@ import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits._
 import java.util.{Collections, Properties}
 
-import models.Recos
+import actors.ChildActor.Done
+import models.ArtistRecos
 import org.apache.kafka.clients.producer._
 import org.apache.kafka.common.serialization.StringDeserializer
 
@@ -31,81 +32,63 @@ class KafkaActor extends Actor {
 
 
   override def receive = {
+
     case Subscribe => {
-
-
-
-   // while(true) {
-
-  val rec = KafkaActor.consumer.poll(1000)
-  println("Total records : " + rec.count())
-
-  val iter = rec.iterator()
-      while(iter.hasNext) {
-        val conRec = iter.next()
-        println("con rec : " + conRec.key() + " value : " + conRec.value())
-        val userId = conRec.key()
-        val recos = conRec.value()
-
-        KafkaActor.userActorMap(userId) ! Recos(recos)
-
-
-      }
-
-//}
-
-
-
+        pollKafkaForIncomingMessage
+    }
+    case (ColdStartArtistRecommendation, message : String) => {
+      sendColdStartMessageToKafka(message, sender())
 
     }
-    case message : String => {
-      Logger.info("Message received by kafka" + message)
-        sendMessageToKafka(message, sender())
+    case (SimilarArtistRecommendation, message : String) => {
+
+    }
+    case (LyricsSongRecommendation, message : String) => {
+
+    }
+    case (LyricsUserRecommendation, message : String) => {
 
     }
   }
 
-  def sendMessageToKafka(message : String, sender : ActorRef) = {
-    Logger.info("message : " + message)
+  def sendColdStartMessageToKafka(message : String, sender : ActorRef) = {
     val messageArr = message.split("<SEP>")
     val userId  = messageArr(0)
     val kafkaMessage = messageArr.drop(1)
-    KafkaActor.userActorMap = KafkaActor.userActorMap ++ Map[String, ActorRef](userId -> sender)
-
-
-    val  properties = new Properties()
-    properties.put("bootstrap.servers", "localhost:9092")
-    properties.put("acks","1")
-    properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-
-
-    val producer = new KafkaProducer[String, String](properties)
-
-    val topic="artistrecommendation"
-
-    val record = new ProducerRecord(topic, userId, kafkaMessage.mkString("<SEP>"))
+    userActorMap = userActorMap ++ Map[String, ActorRef](userId -> sender)
+    val record = new ProducerRecord("artistrecommendation", userId, kafkaMessage.mkString("<SEP>"))
     producer.send(record)
-
-    // self ! Subscribe
-    Logger.info("Message sent to kafka!!")
-    sender ! ("Message sent to kafka", message)
+    sender ! Done
   }
 
 
+  def pollKafkaForIncomingMessage = {
+    val rec = consumer.poll(1000)
+    println("Total records : " + rec.count())
+    val iter = rec.iterator()
+    while(iter.hasNext) {
+      val conRec = iter.next()
+      println("Key : " + conRec.key() + " Value : " + conRec.value())
+      val userId = conRec.key()
+      val recommendation = conRec.value()
+      userActorMap(userId) ! ArtistRecos(recommendation)
+      userActorMap = userActorMap.filter(f => !f._1.equalsIgnoreCase(userId))
+    }
+  }
 
 }
 
 object KafkaActor {
 
   case object Subscribe
+  case object ColdStartArtistRecommendation
+  case object SimilarArtistRecommendation
+  case object LyricsSongRecommendation
+  case object LyricsUserRecommendation
 
   var userActorMap =  Map[String, ActorRef]()
 
   def props() = Props(new KafkaActor())
-
-
-  println("Subscribe message sent")
 
   val  properties = new Properties()
   properties.put("bootstrap.servers", "localhost:9092")
@@ -116,10 +99,7 @@ object KafkaActor {
   properties.put("group.id", "test-consumer-group")
   properties.put("auto.offset.reset", "latest")
 
-
-
-
-
+  val producer = new KafkaProducer[String, String](properties)
   val consumer = new KafkaConsumer[String, String](properties)
 
   consumer.subscribe(Collections.singletonList("generatedartistrecommendations"))

@@ -2,11 +2,12 @@ package music.recommendation.core
 
 import music.recommendation.algorithms.{ArtistRecommendation, GenerateRecommendations, LyricsRecommendation}
 import music.recommendation.bo._
+import music.recommendation.dao.MongoOperations
 import music.recommendation.ingestion.DataInjestion
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 import music.recommendation.utility.FileLocations._
-import music.recommendation.utility.{FileLocations, NLPUtility}
+import music.recommendation.utility.{FileLocations, NLPUtility, SparkUtility}
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.SparkContext
@@ -29,26 +30,17 @@ object MusicRecommendation {
 
   def main(args : Array[String]) : Unit = {
 
-    val spark : SparkSession = getSparkSession
+    val spark = SparkUtility.spark
 
     import spark.implicits._
-    FileLocations.spark = spark
-
-
-
-
-
-
-
-
-
-
+    val mongoOps = new MongoOperations()
     val rawSongRdd : RDD[Row] = DataInjestion.readData(spark, RAW_SONG_INFO_LOCATION)
     val rawUserTasteRdd : RDD[Row] = DataInjestion.readData(spark, RAW_USER_TASTE_LOCATION)
     val rawWordDict : RDD[Row]= DataInjestion.readData(spark, RAW_WORD_DICTIONARY_LOCATION)
     val rawTrackLyrics : RDD[Row] = DataInjestion.readData(spark,RAW_TRACK_LYRICS_LOCATION)
 
-    val artistTrackRDD = convertToSongInfo(rawSongRdd).flatMap(f => f.map(q => q))
+    val artistTrackRDD :RDD[SongInfo] = convertToSongInfo(rawSongRdd).flatMap(f => f.map(q => q))
+    mongoOps.saveArtistSongInfo(artistTrackRDD)
     val userTasteRDD = convertToUserSongTaste(rawUserTasteRdd)
     val tempWordDictionary = convertToDict(rawWordDict).toDF()
       .select('_1.as("wordId"), NLPUtility.getPartOfSpeech('_2).as("pos"))
@@ -73,6 +65,8 @@ object MusicRecommendation {
         " group by u.userId, s.artist").cache()
 
     val combinedRdd: RDD[ArtistCount] = convertCombinedDfToRdd(combinedDf)
+
+    // mongoOps.saveUserArtistInfo(combinedRdd)
     val userZip: Map[String, Long] = prepareUserZip(combinedRdd)
     val artistZip: Map[String, Long] = prepareArtistZip(combinedRdd)
     val artistRecommendation = new ArtistRecommendation()
@@ -92,12 +86,12 @@ object MusicRecommendation {
     val stream = KafkaUtils.createDirectStream[String, String](
       ssc,
       PreferConsistent,
-      Subscribe[String, String](topics, kafkaParams)
+      Subscribe[String, String](topics, SparkUtility.kafkaParams)
     )
 
 
     stream.foreachRDD(rdd => {
-      println("********** MESSAGE RECEIVED *********111111")
+      println("********** MESSAGE RECEIVED *********")
 
       rdd.foreach(c => {
         handleKafkaRecords(new GenerateRecommendations, c,artistKMeansModel, artistZip)
@@ -126,12 +120,13 @@ object MusicRecommendation {
   def convertCombinedDfToRdd(df: DataFrame): RDD[ArtistCount] = df.rdd
     .map(row => ArtistCount(row.getAs("userId"), row.getAs("artist"), row.getAs("count")))
 
-
   def reverseZip(input: Map[String, Long]): Map[Long, String] = input.map(i => (i._2, i._1))
 
   def handleKafkaRecords(gr : GenerateRecommendations, record : ConsumerRecord[String, String], clusters : KMeansModel, artistZip : Map[String , Long]) = {
     record.topic() match {
-      case "artistrecommendation" => gr.handleArtistRecommendation(record,clusters, artistZip)
+      case "ColdStartReco" => gr.handleArtistRecommendation(record,clusters, artistZip)
+      case "ArtistforArtistReco" => gr.
+      case "ExistingUserReco" =>
       case _ => println("Different topic : ")
     }
   }
@@ -193,19 +188,7 @@ object MusicRecommendation {
   })
 
 
-  def getSparkSession : SparkSession = {
 
-    val spark: SparkSession = SparkSession
-      .builder()
-      .master("local[*]")
-      .appName("Real Time Music Reco App")
-      .config("spark.driver.memory", "7g")
-      .config("spark.executor.memory", "3g")
-      .getOrCreate()
-
-    spark
-
-  }
 
 
 }

@@ -4,7 +4,7 @@
 		module="sparkmusicrecommender-build-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20170418140326"
+		publication="20170420153849"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>

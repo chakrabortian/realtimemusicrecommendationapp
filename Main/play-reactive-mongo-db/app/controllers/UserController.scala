@@ -1,7 +1,7 @@
 package controllers
 
 import javax.inject._
-
+import models.MongoModels._
 import actors.{ChildActor, KafkaActor}
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.stream.Materializer
@@ -87,7 +87,6 @@ class UserController @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit 
 
 
     val cursor: Future[List[JsObject]] = getUsersCollection.flatMap{ u =>
-
       u.find(Json.obj("userName" -> userName, "password" -> password)).cursor[JsObject](ReadPreference.primary).collect[List]()
     }
 
@@ -97,12 +96,24 @@ class UserController @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit 
       else
         BadRequest("No User found")
     })
-
   }
 
 
   def acceptUserSurvey = WebSocket.acceptWithActor[String,String] {
     request => out => ChildActor.props(out, kafkaActor)
+  }
+
+  def getUsers = Action.async(parse.json) { request =>
+    val userName = (request.body \ "userName").as[String]
+    val cursor: Future[List[JsObject]] = getUsersCollection.flatMap{ u =>
+      u.find(Json.obj("userName" -> userName)).cursor[JsObject](ReadPreference.primary).collect[List]()
+    }
+    cursor.map(f => {
+    val result = f.map(obj => obj.as[UserObj])
+      
+    })
+
+    ???
   }
 
 
