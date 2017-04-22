@@ -6074,7 +6074,7 @@
 [debug] 	[NOT REQUIRED] org.scala-sbt#template-resolver;0.1!template-resolver.jar
 [debug] 	[NOT REQUIRED] org.scala-lang#jline;2.10.6!jline.jar
 [debug] 	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar
-[debug] :: resolution report :: resolve 7537ms :: artifacts dl 148ms
+[debug] :: resolution report :: resolve 2463ms :: artifacts dl 73ms
 [debug] 	report for default#sparkmusicrecommender-build-build;0.1-SNAPSHOT compile produced in /Users/deveshkandpal/Code/Spark/Scala-Final-Project-Repo/realtimemusicrecommendationapp/Main/SparkMusicRecommender/project/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-build-compile.xml
 [debug] 	report for default#sparkmusicrecommender-build-build;0.1-SNAPSHOT runtime produced in /Users/deveshkandpal/Code/Spark/Scala-Final-Project-Repo/realtimemusicrecommendationapp/Main/SparkMusicRecommender/project/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-build-runtime.xml
 [debug] 	report for default#sparkmusicrecommender-build-build;0.1-SNAPSHOT test produced in /Users/deveshkandpal/Code/Spark/Scala-Final-Project-Repo/realtimemusicrecommendationapp/Main/SparkMusicRecommender/project/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-build-test.xml
@@ -6088,5 +6088,5 @@
 [debug] 	report for default#sparkmusicrecommender-build-build;0.1-SNAPSHOT docs produced in /Users/deveshkandpal/Code/Spark/Scala-Final-Project-Repo/realtimemusicrecommendationapp/Main/SparkMusicRecommender/project/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-build-docs.xml
 [debug] 	report for default#sparkmusicrecommender-build-build;0.1-SNAPSHOT pom produced in /Users/deveshkandpal/Code/Spark/Scala-Final-Project-Repo/realtimemusicrecommendationapp/Main/SparkMusicRecommender/project/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-build-pom.xml
 [debug] 	report for default#sparkmusicrecommender-build-build;0.1-SNAPSHOT scala-tool produced in /Users/deveshkandpal/Code/Spark/Scala-Final-Project-Repo/realtimemusicrecommendationapp/Main/SparkMusicRecommender/project/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-build-scala-tool.xml
-[debug] 	resolve done (7537ms resolve - 148ms download)
+[debug] 	resolve done (2463ms resolve - 73ms download)
 [info] Done updating.

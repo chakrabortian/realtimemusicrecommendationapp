@@ -1,8 +1,8 @@
 package music.recommendation.dao
 
 import com.mongodb.spark.MongoSpark
-import com.mongodb.spark.config.WriteConfig
-import music.recommendation.bo.{ArtistCount, SongInfo, UserPrediction}
+import com.mongodb.spark.config.{ReadConfig, WriteConfig}
+import music.recommendation.bo.{ArtistCount, EntityPrediction, SongInfo}
 import music.recommendation.utility.SparkUtility
 import org.apache.commons.lang.StringEscapeUtils
 import org.apache.spark.rdd.RDD
@@ -35,11 +35,11 @@ class MongoOperations {
 
   }
 
-  def saveArtistSongInfo(artistTrackRDD : RDD[SongInfo]) = {
+  def saveArtistSongInfo(artistTrackRDD : RDD[SongInfo]): Unit = {
 
     val filteredUserArtist = artistTrackRDD
       .groupBy(ua => ua.artist)
-      .mapValues(mv => mv.map(a => (a.trackId +"<SONGINFO>"+a.songId+"<SONGINFO>"+a.title)))
+      .mapValues(mv => mv.map(a => a.trackId +"<SONGINFO>"+a.songId+"<SONGINFO>"+a.title))
 
     val documents = filteredUserArtist.map(m => {
       val artist = StringEscapeUtils.escapeXml(m._1)
@@ -52,26 +52,33 @@ class MongoOperations {
 
   }
 
-  def saveUserClusterPredictions(userPrediction : RDD[UserPrediction]) = {
+  def saveUserClusterPredictions(userPrediction : RDD[EntityPrediction]): Unit = {
 
 
 
     val documents = userPrediction.map(m => {
-      val userId = m.userId
+      val userId = m.id
       val prediction = m.prediction
       val doc = Document.parse(s"{user : '$userId', prediction : $prediction}")
       doc
     })
 
-    MongoSpark.save(documents, MongoOperations.userArtistConfig)
+    MongoSpark.save(documents, MongoOperations.userPredictionConfig)
 
   }
 
-  def saveNewUserPrediction(userId: String, prediction: Int) = {
+  def saveNewUserPrediction(userId: String, prediction: Int): Unit = {
     val doc = List(Document.parse(s"{user : '$userId', prediction : $prediction}"))
     val sc = SparkUtility.spark.sparkContext
     val document = sc.parallelize(doc)
-    MongoSpark.save(document, MongoOperations.userArtistConfig)
+    MongoSpark.save(document, MongoOperations.userPredictionConfig)
+  }
+
+  def getExistingUserPrediction(userId: String): String = {
+    val sc = SparkUtility.spark.sparkContext
+    val documentRDD = MongoSpark.load(sc,MongoOperations.userPredictionReadConfig)
+    val prediction = documentRDD.filter(up => up.toJson.contains(userId)).collect()(0).get("prediction").toString
+    prediction
   }
 
 
@@ -82,4 +89,5 @@ object MongoOperations {
   val userArtistConfig = WriteConfig(Map("uri" -> "mongodb://127.0.0.1/musicrecoapp.userartist"))
   val artistSongConfig = WriteConfig(Map("uri" -> "mongodb://127.0.0.1/musicrecoapp.artistsong"))
   val userPredictionConfig = WriteConfig(Map("uri" -> "mongodb://127.0.0.1/musicrecoapp.userPrediction"))
+  val userPredictionReadConfig = ReadConfig(Map("uri" -> "mongodb://127.0.0.1/musicrecoapp.userPrediction"))
 }

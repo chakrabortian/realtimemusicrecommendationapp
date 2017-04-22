@@ -11,8 +11,17 @@ POST     /persons/bulk              controllers.PersonController.createBulkFromJ
 
 GET      /persons                   controllers.PersonController.findByName(name: String)
 
+
 POST     /createUser                  controllers.UserController.createUser
 POST     /signInUser                  controllers.UserController.signInUser
+
 GET     /acceptUserSurvey                     controllers.UserController.acceptUserSurvey
+GET     /existingUserReco                     controllers.UserController.existingUserReco
+GET     /lyricsBasedReco                     controllers.UserController.lyricsBasedReco
+GET     /similarArtist                     controllers.UserController.similarArtist
+
+GET     /getArtistSongs                     controllers.UserController.getArtistSongs(artistName : String)
+GET     /getUserArtist                     controllers.UserController.getUserArtist(userId : String)
+
 
 

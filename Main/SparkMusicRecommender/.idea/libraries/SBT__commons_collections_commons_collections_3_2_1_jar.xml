@@ -1,7 +1,9 @@
 <component name="libraryTable">
   <library name="SBT: commons-collections:commons-collections:3.2.1:jar">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../../Play/activator-dist-1.3.12/repository/commons-collections/commons-collections/3.2.1/jars/commons-collections.jar!/" />
+      <root url="jar://C:/Play/activator-dist-1.3.12/repository/commons-collections/commons-collections/3.2.1/jars/commons-collections.jar!/" />
+      <root url="jar://$USER_HOME$/.ivy2/cache/commons-collections/commons-collections/jars/commons-collections-3.2.1.jar!/" />
+      <root url="jar://$USER_HOME$/Code/Spark/Play/activator-dist-1.3.12/repository/commons-collections/commons-collections/3.2.1/jars/commons-collections.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

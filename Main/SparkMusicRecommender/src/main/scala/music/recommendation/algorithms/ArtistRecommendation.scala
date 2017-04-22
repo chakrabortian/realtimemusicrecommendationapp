@@ -1,15 +1,13 @@
 package music.recommendation.algorithms
 
-import music.recommendation.bo.ArtistCount
+import music.recommendation.bo.{ArtistCount, _}
+import music.recommendation.dao.MongoOperations
+import music.recommendation.utility.FileLocations._
+import org.apache.spark.mllib.clustering.{KMeans, KMeansModel}
 import org.apache.spark.mllib.linalg.{Vector, Vectors}
+import org.apache.spark.mllib.recommendation.{ALS, MatrixFactorizationModel, Rating}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import music.recommendation.bo._
-import music.recommendation.dao.MongoOperations
-import org.apache.spark.mllib.clustering.{KMeans, KMeansModel}
-import music.recommendation.utility.FileLocations._
-import org.apache.spark.ml.tuning.ParamGridBuilder
-import org.apache.spark.mllib.recommendation.{ALS, MatrixFactorizationModel, Rating}
 
 import scala.collection.Map
 import scala.util.{Failure, Success, Try}
@@ -20,34 +18,33 @@ import scala.util.{Failure, Success, Try}
 class ArtistRecommendation {
 
   def prepareArtistRecommendation(spark : SparkSession, combinedRdd : RDD[ArtistCount], userZip : Map[String, Long],
-                                 artistZip : Map[String, Long]) = {
+                                 artistZip : Map[String, Long]): KMeansModel = {
 
-    val clusters = getKMeansArtistModel(spark, combinedRdd, userZip,
+    val clusters = getOrTrainKMeansArtistModel(spark, combinedRdd, userZip,
                       artistZip, ARTIST_K_MEANS_MODEL_TRAIN_LOCATION)
     clusters
   }
 
-  def checkOrTrainALSModels(spark: SparkSession, parsedData : RDD[Vector],
+  private def checkOrTrainALSModels(spark: SparkSession, parsedData : RDD[Vector],
                             clusters : KMeansModel,
                             userVectorMapping : RDD[(String, Vector)],
                             userZip : Map[String, Long],
                             artistZip: Map[String, Long],
                             combinedRdd : RDD[ArtistCount],
-                            alsLocation : String) = {
+                            alsLocation : String): Unit = {
 
     val loadedModel = Try(MatrixFactorizationModel.load(spark.sparkContext, alsLocation+ "0"))
 
     loadedModel match {
-      case Success(model) => println("ALS Model present, no need to train")
-      case Failure(x) => {
+      case Success(_) => println("ALS Model present, no need to train")
+      case Failure(_) =>
         println("ALS Model not present, need to train")
         trainArtistALSModels(spark , parsedData, clusters, userVectorMapping, userZip,
           artistZip, combinedRdd, alsLocation)
-      }
     }
   }
 
-  def trainArtistALSModels(spark: SparkSession, parsedData : RDD[Vector],
+  private def trainArtistALSModels(spark: SparkSession, parsedData : RDD[Vector],
                            clusters : KMeansModel,
                            userVectorMapping : RDD[(String, Vector)],
                            userZip : Map[String, Long],
@@ -63,18 +60,18 @@ class ArtistRecommendation {
     })
     val mongoOps = new MongoOperations()
 
-    val userVectorMappingDf = userVectorMapping.toDF("userId", "vector")
+    val userVectorMappingDf = userVectorMapping.toDF("id", "vector")
     val vectorPredictionMappingDf = vectorPredictionMapping.toDF("vector", "prediction")
 
     val joinedUserPredictionMappingDf = userVectorMappingDf.join(vectorPredictionMappingDf, "vector")
 
-    val userPredictionRDD  = joinedUserPredictionMappingDf.rdd.map(row => UserPrediction(row.getAs("userId"), row.getAs("prediction")))
+    val userPredictionRDD  = joinedUserPredictionMappingDf.rdd.map(row => EntityPrediction(row.getAs("id"), row.getAs("prediction")))
 
     mongoOps.saveUserClusterPredictions(userPredictionRDD)
 
     val ratings = convertCombinedRddToRating(combinedRdd, userZip, artistZip)
 
-    val userIdPredictionRdd = userPredictionRDD.map(upRdd => (userZip(upRdd.userId).toInt, upRdd.prediction))
+    val userIdPredictionRdd = userPredictionRDD.map(upRdd => (userZip(upRdd.id).toInt, upRdd.prediction))
 
     val userIdPredictionDf = userIdPredictionRdd.toDF("user", "clusterId")
 
@@ -99,28 +96,26 @@ class ArtistRecommendation {
 
   }
 
-  def convertCombinedRddToRating(data : RDD[ArtistCount], users : Map[String, Long], artists : Map[String, Long]) : RDD[Rating] = data.map(r => Rating(users(r.userId).toInt, artists(r.artist).toInt, r.count))
+  private def convertCombinedRddToRating(data : RDD[ArtistCount], users : Map[String, Long], artists : Map[String, Long]) : RDD[Rating] = data.map(r => Rating(users(r.userId).toInt, artists(r.artist).toInt, r.count))
 
 
 
-  def getKMeansArtistModel(spark: SparkSession,
+  private def getOrTrainKMeansArtistModel(spark: SparkSession,
                            combinedRdd : RDD[ArtistCount],
                            userZip : Map[String, Long],
                            artistZip : Map[String, Long],
-                           location : String) : KMeansModel  = {
+                           location : String): KMeansModel = {
     val loadModel = Try(KMeansModel.load(spark.sparkContext, location))
     loadModel match {
-      case Success(model) => {
+      case Success(model) =>
         println("KMeans Artist Model found")
         model
-      }
-      case Failure(x) =>  {
+      case Failure(_) =>
         println("KMeans Artist Model Not Found, Training KMeans Artist")
         trainKMeansArtist(spark,combinedRdd, userZip, artistZip, location)
-      }
     }
   }
-  def trainKMeansArtist(spark : SparkSession, combinedRdd : RDD[ArtistCount],
+  private def trainKMeansArtist(spark : SparkSession, combinedRdd : RDD[ArtistCount],
                         userZip : Map[String, Long],
                         artistZip : Map[String, Long],
                         location : String) : KMeansModel = {
@@ -156,23 +151,18 @@ class ArtistRecommendation {
     clusters
   }
 
-  def getVectorPredictionMapping(parsedData : RDD[Vector], clusters : KMeansModel) = parsedData.map(vector => {
-    val prediction = clusters.predict(vector)
-    (vector, prediction)
-  })
-
-  def getUserVectorMapping(artistGroupedByUser : RDD[(String, Iterable[UserArtist])]) : RDD[(String, Vector)] = artistGroupedByUser.map(entry => {
+  private def getUserVectorMapping(artistGroupedByUser : RDD[(String, Iterable[UserArtist])]) : RDD[(String, Vector)] = artistGroupedByUser.map(entry => {
     val vector = Vectors.dense(entry._2.map(ua => ua.artistId.toDouble).toArray)
     (entry._1, vector)
   }).cache()
 
-  def convertArtistNameToIndex(df: DataFrame, artistZip: Map[String, Long]): RDD[UserArtist] = df
+  private def convertArtistNameToIndex(df: DataFrame, artistZip: Map[String, Long]): RDD[UserArtist] = df
     .rdd.
     map(row => UserArtist(row.getAs("userId"), artistZip(row.getAs("artist"))))
 
-  def flattenRDD(input: RDD[List[ArtistCount]]): RDD[ArtistCount] = input.flatMap(a => a.map(b => b))
+  private def flattenRDD(input: RDD[List[ArtistCount]]): RDD[ArtistCount] = input.flatMap(a => a.map(b => b))
 
-  def getGroupedFeatureVector(combinedRdd : RDD[ArtistCount]) = combinedRdd
+  private def getGroupedFeatureVector(combinedRdd : RDD[ArtistCount]): RDD[List[ArtistCount]] = combinedRdd
     .groupBy(k => k.userId).filter(f => f._2.size >= 3)
     .map(record => record._2.toList)
     .map(newRec => newRec.sortWith((fe, se) => fe.count > se.count)

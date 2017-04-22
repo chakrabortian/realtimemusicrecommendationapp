@@ -4,16 +4,12 @@ import music.recommendation.algorithms.{ArtistRecommendation, GenerateRecommenda
 import music.recommendation.bo._
 import music.recommendation.dao.MongoOperations
 import music.recommendation.ingestion.DataInjestion
+import music.recommendation.utility.FileLocations._
+import music.recommendation.utility.{NLPUtility, SparkUtility}
+import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
-import music.recommendation.utility.FileLocations._
-import music.recommendation.utility.{FileLocations, NLPUtility, SparkUtility}
-import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.apache.kafka.common.serialization.StringDeserializer
-import org.apache.spark.SparkContext
-import org.apache.spark.mllib.clustering.{KMeans, KMeansModel}
-import org.apache.spark.mllib.linalg.Vectors
-import org.apache.spark.mllib.recommendation.MatrixFactorizationModel
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.streaming.kafka010.KafkaUtils
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
@@ -45,7 +41,6 @@ object MusicRecommendation {
     val tempWordDictionary = convertToDict(rawWordDict).toDF()
       .select('_1.as("wordId"), NLPUtility.getPartOfSpeech('_2).as("pos"))
     val wordPosDictionary = getWordPosDictionary(tempWordDictionary)
-
     spark.sparkContext.broadcast(wordPosDictionary)
 
     val artistTrackDf = artistTrackRDD.toDF()
@@ -66,22 +61,18 @@ object MusicRecommendation {
 
     val combinedRdd: RDD[ArtistCount] = convertCombinedDfToRdd(combinedDf)
 
-    // mongoOps.saveUserArtistInfo(combinedRdd)
+    mongoOps.saveUserArtistInfo(combinedRdd)
     val userZip: Map[String, Long] = prepareUserZip(combinedRdd)
     val artistZip: Map[String, Long] = prepareArtistZip(combinedRdd)
+
     val artistRecommendation = new ArtistRecommendation()
     val artistKMeansModel = artistRecommendation.prepareArtistRecommendation(spark, combinedRdd, userZip, artistZip)
-
     val lyricsRecommendation = new LyricsRecommendation()
-    val (lyricsUsersClusters, lyricsSongsClusters) = lyricsRecommendation
-      .prepareLyricsRecommendationModels(spark, lyricsWithRelevantPosRdd,
+    val (lyricsUsersClusters, lyricsSongsTuple) = lyricsRecommendation.prepareLyricsRecommendationModels(spark, lyricsWithRelevantPosRdd,
         userTasteDf, artistTrackDf)
-    
-
     val ssc = new StreamingContext(spark.sparkContext, Seconds(5))
-
     ssc.checkpoint("checkpoint")
-    val topics = Array("artistrecommendation")
+    val topics = Array("ColdStartRecoRequest","ArtistforArtistRecoRequest","ExistingUserRecoRequest","SongRecoRequest")
 
     val stream = KafkaUtils.createDirectStream[String, String](
       ssc,
@@ -94,7 +85,7 @@ object MusicRecommendation {
       println("********** MESSAGE RECEIVED *********")
 
       rdd.foreach(c => {
-        handleKafkaRecords(new GenerateRecommendations, c,artistKMeansModel, artistZip)
+        handleKafkaRecords(new GenerateRecommendations, c,artistKMeansModel, artistZip, userZip,lyricsUsersClusters,lyricsSongsTuple,lyricsWithRelevantPosRdd)
       })
 
     })
@@ -122,28 +113,36 @@ object MusicRecommendation {
 
   def reverseZip(input: Map[String, Long]): Map[Long, String] = input.map(i => (i._2, i._1))
 
-  def handleKafkaRecords(gr : GenerateRecommendations, record : ConsumerRecord[String, String], clusters : KMeansModel, artistZip : Map[String , Long]) = {
+  def handleKafkaRecords(gr : GenerateRecommendations, record : ConsumerRecord[String, String], clusters : KMeansModel, artistZip : Map[String , Long], userZip : Map[String , Long],lyricsUsersClusters : KMeansModel, lyricsSongsTuple : (KMeansModel,RDD[SongVectorPrediction]), lyricsWithRelevantPosRdd : RDD[LyricsInfo]): Any = {
     record.topic() match {
-      case "ColdStartReco" => gr.handleArtistRecommendation(record,clusters, artistZip)
-      case "ArtistforArtistReco" => gr.
-      case "ExistingUserReco" =>
-      case _ => println("Different topic : ")
+      case "ColdStartRecoRequest" => gr.handleColdStartRecommendation(record,clusters, artistZip)
+      case "ExistingUserRecoRequest"=> {
+        println("RECEIVED EXISTING USER RECO REQUEST")
+        gr.handleExistingUserRecomendation(record,artistZip, userZip)
+      }
+        case "ArtistforArtistRecoRequest" => {
+          println("RECEIVED ARTIST FOR ARTIST RECO REQUEST")
+          gr.handleArtistForArtistRecomendation(record,clusters, artistZip)
+        }
+      case "SongRecoRequest" => {
+        println("RECEIVED LYRICS BASED SONG REQUEST")
+        gr.handleSongRecomendation(record,lyricsUsersClusters,lyricsSongsTuple,lyricsWithRelevantPosRdd)
+      }
+      case _ => println("unrecognised topic : ")
     }
   }
 
 
-  def getLyricsWithRelevantPos(rdd : RDD[LyricsInfo]) : RDD[LyricsInfo] =  rdd.filter(row => NLPUtility.relevantPos.contains(row.pos)).map(row => {
-    row match {
-      case LyricsInfo(a,b,c,"JJ") => LyricsInfo(a,b,c, "Adjective")
-      case LyricsInfo(a,b,c,"JJR") => LyricsInfo(a,b,c, "Adjective")
-      case LyricsInfo(a,b,c,"JJS") => LyricsInfo(a,b,c, "Adjective")
-      case LyricsInfo(a,b,c,"RB") => LyricsInfo(a,b,c, "Adverb")
-      case LyricsInfo(a,b,c,"RBR") => LyricsInfo(a,b,c, "Adverb")
-      case LyricsInfo(a,b,c,"RBS") => LyricsInfo(a,b,c, "Adverb")
-      case LyricsInfo(a,b,c,"VB") => LyricsInfo(a,b,c, "Verb")
-      case LyricsInfo(a,b,c,"WRB") => LyricsInfo(a,b,c, "Adjective")
-    }
-  })
+  def getLyricsWithRelevantPos(rdd : RDD[LyricsInfo]) : RDD[LyricsInfo] =  rdd.filter(row => NLPUtility.relevantPos.contains(row.pos)).map {
+    case LyricsInfo(a, b, c, "JJ") => LyricsInfo(a, b, c, "Adjective")
+    case LyricsInfo(a, b, c, "JJR") => LyricsInfo(a, b, c, "Adjective")
+    case LyricsInfo(a, b, c, "JJS") => LyricsInfo(a, b, c, "Adjective")
+    case LyricsInfo(a, b, c, "RB") => LyricsInfo(a, b, c, "Adverb")
+    case LyricsInfo(a, b, c, "RBR") => LyricsInfo(a, b, c, "Adverb")
+    case LyricsInfo(a, b, c, "RBS") => LyricsInfo(a, b, c, "Adverb")
+    case LyricsInfo(a, b, c, "VB") => LyricsInfo(a, b, c, "Verb")
+    case LyricsInfo(a, b, c, "WRB") => LyricsInfo(a, b, c, "Adjective")
+  }
 
 
   def convertToLyricsInfo(rawRdd : RDD[Row], dict : Map[Int, String]) : RDD[LyricsInfo]  = rawRdd.flatMap(row => {
@@ -158,7 +157,7 @@ object MusicRecommendation {
     lyricsInfo
   })
 
-  def getWordPosDictionary(tempWordDictionary: DataFrame) = tempWordDictionary.rdd.map(row => (row.getAs[Int]("wordId"), row.getAs[Seq[String]]("pos")(0))).collectAsMap()
+  def getWordPosDictionary(tempWordDictionary: DataFrame): Map[Int, String] = tempWordDictionary.rdd.map(row => (row.getAs[Int]("wordId"), row.getAs[Seq[String]]("pos")(0))).collectAsMap()
 
   def convertToDict(rawRdd : RDD[Row]) : RDD[(Int, String)] = rawRdd.flatMap(row => {
     val x = row.mkString
@@ -173,7 +172,7 @@ object MusicRecommendation {
     val x = row.mkString
     parse(x) match {
       case Success(m) => Some(m)
-      case Failure(n) => None
+      case Failure(_) => None
     }
   })
 

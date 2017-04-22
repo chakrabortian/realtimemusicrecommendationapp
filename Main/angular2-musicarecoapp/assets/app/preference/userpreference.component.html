@@ -1,0 +1,18 @@
+<h2>Kindly Select 3 artist from the below list</h2>
+<br>
+<br>
+<h4>Currently Selected {{counter}}</h4>
+
+   <ul style="list-style-type: none;">
+
+       <li *ngFor="let obj of artistList">
+
+           <button type="button" class="btn btn-primary" (click)=onClick(obj)>{{obj}}<br></button>
+
+
+       </li>
+
+   </ul>
+
+           <button type="submit" class="btn btn-danger" (click)=onSubmit()>Submit</button>
+

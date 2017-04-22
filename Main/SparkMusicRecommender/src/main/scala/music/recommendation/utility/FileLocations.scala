@@ -20,7 +20,7 @@ object FileLocations {
   val RAW_TRACK_LYRICS_LOCATION = "/Users/deveshkandpal/Code/Spark/dataset/subset/musicxmatch/lyrics.txt"
 
 
-// Model locations
+  // Model locations
   val ALS_MODEL_TRAIN_LOCATION = "/Users/deveshkandpal/Code/Spark/dataset/finalmodels/als/"
 
   val ARTIST_K_MEANS_MODEL_TRAIN_LOCATION = "/Users/deveshkandpal/Code/Spark/dataset/finalmodels/kmeans/artist"
