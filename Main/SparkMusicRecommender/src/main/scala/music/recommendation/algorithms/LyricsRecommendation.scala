@@ -154,3 +154,13 @@ class LyricsRecommendation {
 
 
 }
+
+object LyricsRecommendation {
+  val instance = new LyricsRecommendation()
+
+  def getUserSongLyricsPosInfo(rdd : RDD[Row]) : RDD[UserSongLyricsPosInfo] = instance.getUserSongLyricsPosInfo(rdd)
+
+
+  def getVectorsForAllSongLyrics(lyricsWithRelevantPosRdd : RDD[LyricsInfo]) : RDD[(String,Vector)] = instance.getVectorsForAllSongLyrics(lyricsWithRelevantPosRdd)
+}
+

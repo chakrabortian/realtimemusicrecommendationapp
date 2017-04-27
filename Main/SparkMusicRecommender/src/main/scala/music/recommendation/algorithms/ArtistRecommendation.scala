@@ -169,3 +169,18 @@ class ArtistRecommendation {
       .dropRight(newRec.size - 3))
 
 }
+
+object ArtistRecommendation {
+
+  val instance = new ArtistRecommendation()
+
+  def getGroupedFeatureVector(combinedRdd : RDD[ArtistCount]) = instance.getGroupedFeatureVector(combinedRdd)
+
+  def flattenRDD(input: RDD[List[ArtistCount]]): RDD[ArtistCount] = instance.flattenRDD(input)
+
+  def convertArtistNameToIndex(df: DataFrame, artistZip: Map[String, Long]) = instance.convertArtistNameToIndex(df,artistZip)
+
+  def getUserVectorMapping(artistGroupedByUser : RDD[(String, Iterable[UserArtist])]) : RDD[(String, Vector)] = instance.getUserVectorMapping(artistGroupedByUser)
+
+  def convertCombinedRddToRating(data : RDD[ArtistCount], users : Map[String, Long], artists : Map[String, Long]) : RDD[Rating] = instance.convertCombinedRddToRating(data, users, artists)
+}

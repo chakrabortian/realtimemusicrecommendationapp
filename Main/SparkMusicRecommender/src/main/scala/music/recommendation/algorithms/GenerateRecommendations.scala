@@ -155,6 +155,10 @@ object GenerateRecommendations {
 
   val producer = new KafkaProducer[String, String](props)
 
+  val instance = new GenerateRecommendations()
+
+  def getDistance(vector: Vector,clusterCentre: Vector): Double = instance.getDistance(vector, clusterCentre)
+
 }
 
 

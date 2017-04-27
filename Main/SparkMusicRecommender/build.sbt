@@ -28,6 +28,8 @@ libraryDependencies += "org.apache.spark" % "spark-streaming_2.11" % "2.1.0"
 
 libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.0.0"
 
+libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.2"
+
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 
