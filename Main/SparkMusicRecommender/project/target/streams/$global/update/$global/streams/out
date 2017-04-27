@@ -1,4 +1,4 @@
-[info] Updating {file:/Users/deveshkandpal/Downloads/SparkMusicRecommender/project/}sparkmusicrecommender-build...
+[info] Updating {file:/C:/ScalaProject/SparkMusicRecommender/project/}sparkmusicrecommender-build...
 [debug] :: resolving dependencies :: default#sparkmusicrecommender-build;0.1-SNAPSHOT
 [debug] 	confs: [compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool]
 [debug] 	validate = true
@@ -6074,19 +6074,19 @@
 [debug] 	[NOT REQUIRED] org.scala-sbt#template-resolver;0.1!template-resolver.jar
 [debug] 	[NOT REQUIRED] org.scala-lang#jline;2.10.6!jline.jar
 [debug] 	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar
-[debug] :: resolution report :: resolve 2908ms :: artifacts dl 82ms
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT compile produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-compile.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT runtime produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-runtime.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT test produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-test.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT provided produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-provided.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT optional produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-optional.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT compile-internal produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-compile-internal.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT runtime-internal produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-runtime-internal.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT test-internal produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-test-internal.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT plugin produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-plugin.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT sources produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-sources.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT docs produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-docs.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT pom produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-pom.xml
-[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT scala-tool produced in /Users/deveshkandpal/Downloads/SparkMusicRecommender/project/target/resolution-cache/reports/default-sparkmusicrecommender-build-scala-tool.xml
-[debug] 	resolve done (2908ms resolve - 82ms download)
+[debug] :: resolution report :: resolve 615ms :: artifacts dl 15ms
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT compile produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-compile.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT runtime produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-runtime.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT test produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-test.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT provided produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-provided.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT optional produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-optional.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT compile-internal produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-compile-internal.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT runtime-internal produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-runtime-internal.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT test-internal produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-test-internal.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT plugin produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-plugin.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT sources produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-sources.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT docs produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-docs.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT pom produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-pom.xml
+[debug] 	report for default#sparkmusicrecommender-build;0.1-SNAPSHOT scala-tool produced in C:\ScalaProject\SparkMusicRecommender\project\target\resolution-cache\reports\default-sparkmusicrecommender-build-scala-tool.xml
+[debug] 	resolve done (615ms resolve - 15ms download)
 [info] Done updating.

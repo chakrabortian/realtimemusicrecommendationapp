@@ -16,7 +16,7 @@ class LyricsRecommendation {
 
   def prepareLyricsRecommendationModels(spark : SparkSession,
                                   lyricsWithRelevantPosRdd : RDD[LyricsInfo],
-                                 userTasteDf : DataFrame, artistTrackDf : DataFrame): (KMeansModel, (KMeansModel, RDD[SongVectorPrediction])) = {
+                                 userTasteDf : DataFrame, artistTrackDf : DataFrame): (KMeansModel, (KMeansModel, List[SongVectorPrediction])) = {
     val songVectorsMap = getVectorsForAllSongLyrics(lyricsWithRelevantPosRdd)
 
 
@@ -37,9 +37,9 @@ class LyricsRecommendation {
 
     val songPredictionRDD  = joinedSongPredictionMappingDf.rdd.map(row => SongVectorPrediction(row.getAs("id"), row.getAs("vector"),row.getAs("prediction")))
 
-    //val songPrediction = songPredictionRDD.collect()
+    val songPrediction = songPredictionRDD.collect().toList
 
-    val lyricsSongsTuple = (lyricsSongsClusters,songPredictionRDD)
+    val lyricsSongsTuple = (lyricsSongsClusters,songPrediction)
 
 
     (lyricsUsersClusters, lyricsSongsTuple)

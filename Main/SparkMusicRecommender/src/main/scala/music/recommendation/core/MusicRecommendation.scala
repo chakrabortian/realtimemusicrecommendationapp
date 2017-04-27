@@ -47,8 +47,9 @@ object MusicRecommendation {
     val userTasteDf = userTasteRDD.toDF()
 
     val lyricsInfoRdd : RDD[LyricsInfo] = convertToLyricsInfo(rawTrackLyrics, wordPosDictionary)
-    val lyricsWithRelevantPosRdd : RDD [LyricsInfo] = getLyricsWithRelevantPos(lyricsInfoRdd).cache()
-
+    val lyricsWithRelevantPosRdd: RDD[LyricsInfo] = getLyricsWithRelevantPos(lyricsInfoRdd)
+    val lyricsWithRelevantPosList:List[LyricsInfo] = lyricsWithRelevantPosRdd.collect().toList
+    spark.sparkContext.broadcast(lyricsWithRelevantPosList)
     artistTrackDf.createOrReplaceTempView("songInfo")
     userTasteDf.createOrReplaceTempView("userTaste")
 
@@ -61,7 +62,7 @@ object MusicRecommendation {
 
     val combinedRdd: RDD[ArtistCount] = convertCombinedDfToRdd(combinedDf)
 
-    mongoOps.saveUserArtistInfo(combinedRdd)
+   mongoOps.saveUserArtistInfo(combinedRdd)
     val userZip: Map[String, Long] = prepareUserZip(combinedRdd)
     val artistZip: Map[String, Long] = prepareArtistZip(combinedRdd)
 
@@ -85,7 +86,8 @@ object MusicRecommendation {
       println("********** MESSAGE RECEIVED *********")
 
       rdd.foreach(c => {
-        handleKafkaRecords(new GenerateRecommendations, c,artistKMeansModel, artistZip, userZip,lyricsUsersClusters,lyricsSongsTuple,lyricsWithRelevantPosRdd)
+
+        handleKafkaRecords(new GenerateRecommendations, c,artistKMeansModel, artistZip, userZip,lyricsUsersClusters,lyricsSongsTuple,lyricsWithRelevantPosList)
       })
 
     })
@@ -113,7 +115,7 @@ object MusicRecommendation {
 
   def reverseZip(input: Map[String, Long]): Map[Long, String] = input.map(i => (i._2, i._1))
 
-  def handleKafkaRecords(gr : GenerateRecommendations, record : ConsumerRecord[String, String], clusters : KMeansModel, artistZip : Map[String , Long], userZip : Map[String , Long],lyricsUsersClusters : KMeansModel, lyricsSongsTuple : (KMeansModel,RDD[SongVectorPrediction]), lyricsWithRelevantPosRdd : RDD[LyricsInfo]): Any = {
+  def handleKafkaRecords(gr : GenerateRecommendations, record : ConsumerRecord[String, String], clusters : KMeansModel, artistZip : Map[String , Long], userZip : Map[String , Long], lyricsUsersClusters : KMeansModel, lyricsSongsTuple : (KMeansModel,List[SongVectorPrediction]), lyricsWithRelevantPosList : List[LyricsInfo]): Any = {
     record.topic() match {
       case "ColdStartRecoRequest" => gr.handleColdStartRecommendation(record,clusters, artistZip)
       case "ExistingUserRecoRequest"=> {
@@ -126,7 +128,7 @@ object MusicRecommendation {
         }
       case "SongRecoRequest" => {
         println("RECEIVED LYRICS BASED SONG REQUEST")
-        gr.handleSongRecomendation(record,lyricsUsersClusters,lyricsSongsTuple,lyricsWithRelevantPosRdd)
+        gr.handleSongRecomendation(record,lyricsUsersClusters,lyricsSongsTuple,lyricsWithRelevantPosList)
       }
       case _ => println("unrecognised topic : ")
     }

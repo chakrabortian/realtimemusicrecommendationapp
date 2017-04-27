@@ -15,6 +15,7 @@ import org.apache.spark.mllib.recommendation.MatrixFactorizationModel
 import org.apache.spark.rdd.RDD
 
 import scala.collection.Map
+import scala.collection.immutable.Iterable
 
 /**
   * Created by deveshkandpal on 4/18/17.
@@ -32,17 +33,14 @@ class GenerateRecommendations {
 
   }
 
-  def handleSongRecomendation(record : ConsumerRecord[String, String], lyricsUsersClusters : KMeansModel, lyricsSongsTuple : (KMeansModel,RDD[SongVectorPrediction]), lyricsWithRelevantPosRdd : RDD[LyricsInfo]): Future[RecordMetadata] ={
+  def handleSongRecomendation(record : ConsumerRecord[String, String], lyricsUsersClusters : KMeansModel, lyricsSongsTuple : (KMeansModel,List[SongVectorPrediction]), lyricsWithRelevantPosList : List[LyricsInfo]): Future[RecordMetadata] ={
     val userId = record.key
     val userPreference = record.value.split("<SEP>").toList
     val lyricsSongsClusters = lyricsSongsTuple._1
-    val songPredictionRDD = lyricsSongsTuple._2
-    val songPredictionList = songPredictionRDD.collect().toList
-    val predictedClusterRDD = lyricsSongsClusters.predict(getVectorsForUserSession(userPreference, lyricsWithRelevantPosRdd))
-    val predictedCluster = predictedClusterRDD.collect().head
-    //val lastSongCluster = songPredictionList.filter(sp => sp.id == userPreference.last).head.prediction
+    val songPrediction = lyricsSongsTuple._2
+    val predictedCluster = lyricsSongsClusters.predict(getVectorsForUserSession(userPreference, lyricsWithRelevantPosList).head)
     val clusterCentre = lyricsSongsClusters.clusterCenters(predictedCluster)
-    val recommendations = songPredictionList.filter(sp => sp.prediction == predictedCluster).map(s => (s.id,getDistance(s.vector,clusterCentre))).sortWith((rec1, rec2) => rec1._2 > rec2._2).map(sv => sv._1).take(10).mkString("<SEP>")
+    val recommendations = songPrediction.filter(sp => sp.prediction == predictedCluster).map(s => (s.id,getDistance(s.vector,clusterCentre))).sortWith((rec1, rec2) => rec1._2 > rec2._2).map(sv => sv._1).take(10).mkString("<SEP>")
     pushToKafka(userId, "SongRecoResponse", recommendations)
   }
 
@@ -125,11 +123,11 @@ class GenerateRecommendations {
 
   }
 
-  private def getVectorsForUserSession(trackIds : List[String], lyricsWithRelevantPosRdd : RDD[LyricsInfo]) : RDD[Vector] = {
+  private def getVectorsForUserSession(trackIds : List[String], lyricsWithRelevantPosList : List[LyricsInfo]): Iterable[Vector] = {
 
-    val filteredLyricsInfo = lyricsWithRelevantPosRdd
+    val filteredLyricsInfo = lyricsWithRelevantPosList
       .filter( rdd => trackIds.contains(rdd.trackId))
-      .groupBy(us2 => us2.pos).map(us3 => us3._2.toList
+      .groupBy(us2 => us2.pos).map(us3 => us3._2
       .sortWith((l1, l2) => l1.count > l2.count)
       .take(2))
       .flatMap(fm => fm)
@@ -142,7 +140,7 @@ class GenerateRecommendations {
       } else (mv._1, mv._2)
     })
 
-    filteredLyricsInfo.map(fli => Vectors.dense(fli._2.map(f => f.wordId.toDouble).toArray)).cache()
+    filteredLyricsInfo.map(fli => Vectors.dense(fli._2.map(f => f.wordId.toDouble).toArray))
 
   }
 }
